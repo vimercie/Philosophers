@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vimercie <vimercie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 18:31:44 by vimercie          #+#    #+#             */
-/*   Updated: 2022/10/05 19:28:54 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/10/27 14:36:30 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 	pthread_t	thread_philos;
 	t_philo 	p;

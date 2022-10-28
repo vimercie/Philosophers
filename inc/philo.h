@@ -14,7 +14,6 @@
 
 # define PHILO_H
 
-# include "../Libft/inc/libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
