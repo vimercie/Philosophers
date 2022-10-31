@@ -1,0 +1,6 @@
+memset 				- Remplir une zone mémoire avec un octet donné
+pthread_create 		- Créer un nouveau thread  
+pthread_detach 		- Place un thread en cours d'éxécution dans l'état détaché  
+pthread_join 		- Attendre la fin d'un autre thread  
+pthread_mutex		- Opérations sur les mutex  
+usleep 				- Interrompre le programme durant un nombre donné de microsecondes   

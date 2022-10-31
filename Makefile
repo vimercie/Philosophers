@@ -7,6 +7,9 @@ OBJDIR=		obj
 INCDIR=		inc
 
 SRC=		main.c						\
+			parsing.c					\
+			philo_utils.c				\
+			threading.c
 
 
 
@@ -15,8 +18,6 @@ OBJ=		${addprefix ${OBJDIR}/,		\
 
 INC=		${INCDIR}/philo.h
 
-LIB=		Libft/libft.a
-
 CC=			cc
 
 CFLAGS=		-Wall -Wextra -Werror
@@ -24,26 +25,20 @@ CFLAGS=		-Wall -Wextra -Werror
 all:		${OBJDIR} ${NAME}
 
 ${NAME}:	${OBJ} ${INC}
-			make -C Libft
-			${CC} ${OBJ} ${LIB} -o ${NAME}
-
-lib:
-			make -C Libft
+			${CC} ${OBJ} -o ${NAME}
 
 ${OBJDIR}:
 			mkdir -p obj
 
 ${OBJDIR}/%.o:	%.c ${INC} Makefile
-			${CC} ${CFLAGS} -lpthread -c $< -o $@
+			${CC} ${CFLAGS} -c $< -o $@
 
 
 clean:
 			rm -rf ${OBJDIR}
-			make clean -C Libft
 
 fclean:		clean
-			${RM} ${NAME} libft.a
-			make fclean -C Libft
+			${RM} ${NAME}
 
 re:			fclean all
 

@@ -23,11 +23,27 @@
 
 typedef struct s_philo
 {
-    int n_philo;
-    int t_die;
-    int t_eat;
-    int t_sleep;
-    int n_eat;
-}               t_philo;
+	int	philo_id;
+}				t_philo;
+
+typedef struct s_data
+{
+	int		n_philo;
+	int		t_die;
+	int		t_eat;
+	int		t_sleep;
+	int		n_eat;
+}				t_data;
+
+// parsing
+int	parsing(t_data *p, int argc, char *argv[]);
+
+// threading
+int	thread_init(t_data *p);
+
+// utils
+int	ft_isdigit(int c);
+int	is_number(char *s);
+int	ft_atoi(const char *str);
 
 #endif
