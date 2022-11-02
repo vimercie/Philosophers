@@ -25,7 +25,7 @@ CFLAGS=		-Wall -Wextra -Werror
 all:		${OBJDIR} ${NAME}
 
 ${NAME}:	${OBJ} ${INC}
-			${CC} ${OBJ} -o ${NAME}
+			${CC} ${OBJ} -o ${NAME} -lpthread
 
 ${OBJDIR}:
 			mkdir -p obj

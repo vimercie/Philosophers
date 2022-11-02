@@ -23,7 +23,7 @@
 
 typedef struct s_philo
 {
-	int	philo_id;
+	int	*philo_id;
 }				t_philo;
 
 typedef struct s_data
