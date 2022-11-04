@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/04 16:05:06 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/04 16:16:01 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	thread_init(t_data *data)
 	int			i;
 
 	i = 0;
-	data_init(data);
+	if (!data_init(data))
+		return (0);
 	while (i < data->n_philo)
 	{
 		philo_init(data, i);
