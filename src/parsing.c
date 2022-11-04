@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2022/10/31 14:34:02 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/11/04 16:08:38 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ int	parsing(t_data *data, int argc, char *argv[])
 		return (0);
 	}
 	data->n_philo = ft_atoi(argv[1]);
+	if (data->n_philo < 1)
+	{
+		write(1, "there must be at least one philosopher\n", 39);
+		return (0);
+	}
 	data->t_die = ft_atoi(argv[2]);
 	data->t_eat = ft_atoi(argv[3]);
 	data->t_sleep = ft_atoi(argv[4]);

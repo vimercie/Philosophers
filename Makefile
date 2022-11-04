@@ -8,8 +8,9 @@ INCDIR=		inc
 
 SRC=		main.c						\
 			parsing.c					\
-			philo_utils.c				\
-			threading.c
+			threading.c					\
+			philo_init.c				\
+			philo_utils.c
 
 
 

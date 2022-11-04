@@ -23,16 +23,21 @@
 
 typedef struct s_philo
 {
-	int	*philo_id;
+	int				*philo_id;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
 }				t_philo;
 
 typedef struct s_data
 {
-	int		n_philo;
-	int		t_die;
-	int		t_eat;
-	int		t_sleep;
-	int		n_eat;
+	pthread_t		*threads;
+	t_philo			*p;
+	pthread_mutex_t	*forks_id;
+	int				n_philo;
+	int				t_die;
+	int				t_eat;
+	int				t_sleep;
+	int				n_eat;
 }				t_data;
 
 // parsing
@@ -40,6 +45,10 @@ int	parsing(t_data *p, int argc, char *argv[]);
 
 // threading
 int	thread_init(t_data *p);
+
+// init
+int	data_init(t_data *data);
+int	philo_init(t_data *data, int i);
 
 // utils
 int	ft_isdigit(int c);
