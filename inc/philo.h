@@ -26,6 +26,13 @@ typedef struct s_philo
 	int				*philo_id;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
+	struct timeval	*time_from_start;
+	struct timeval	time_now;
+	int				n_philo;
+	int				t_die;
+	int				t_eat;
+	int				t_sleep;
+	int				n_eat;
 }				t_philo;
 
 typedef struct s_data
@@ -33,6 +40,7 @@ typedef struct s_data
 	pthread_t		*threads;
 	t_philo			*p;
 	pthread_mutex_t	*forks_id;
+	struct timeval	time_from_start;
 	int				n_philo;
 	int				t_die;
 	int				t_eat;
@@ -51,6 +59,7 @@ int	data_init(t_data *data);
 int	philo_init(t_data *data, int i);
 
 // utils
+int	get_time(t_philo *p);
 int	ft_isdigit(int c);
 int	is_number(char *s);
 int	ft_atoi(const char *str);

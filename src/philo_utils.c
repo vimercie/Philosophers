@@ -6,11 +6,20 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/10/31 13:40:33 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/11/08 19:14:33 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+int	get_time(t_philo *p)
+{
+	suseconds_t	n;
+
+	gettimeofday(&p->time_now, NULL);
+	n = (p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000;
+	return (n);
+}
 
 int	ft_isdigit(int c)
 {

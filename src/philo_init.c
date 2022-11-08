@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/04 16:10:41 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/08 19:12:52 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,14 @@ int	philo_init(t_data *data, int i)
 			data->p[i].left_fork = &data->forks_id[i - 1];
 		else
 			data->p[i].left_fork = &data->forks_id[data->n_philo - 1];
+		// get_time
+		data->p[i].time_from_start = &data->time_from_start;
+		gettimeofday(&data->p[i].time_now, NULL);
+		// sreidg
+		data->p[i].n_philo = data->n_philo;
+		data->p[i].t_eat = data->t_eat;
+		data->p[i].t_sleep = data->t_sleep;
+		data->p[i].t_die = data->t_die;
 		return (1);
 }
 
@@ -41,5 +49,6 @@ int	data_init(t_data *data)
 		free(data->p);
 		return (0);
 	}
+	gettimeofday(&data->time_from_start, NULL);
 	return (1);
 }
