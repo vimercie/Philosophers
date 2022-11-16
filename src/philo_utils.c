@@ -6,18 +6,40 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/08 19:14:33 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/16 13:06:20 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+int	custom_usleep(int time_in_ms, t_philo *p)
+{
+	int	start;
+	int	now;
+
+	start = get_time(p);
+	now = 0;
+	while ((now - start) < time_in_ms)
+	{
+		usleep(50);
+		now = get_time(p);
+	}
+	return (1);
+}
+
 int	get_time(t_philo *p)
 {
 	suseconds_t	n;
+	time_t		sec;
 
 	gettimeofday(&p->time_now, NULL);
-	n = (p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000;
+	if (p->time_from_start->tv_sec == p->time_now.tv_sec)
+		n = (p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000;
+	else
+	{
+		sec = p->time_now.tv_sec - p->time_from_start->tv_sec;
+		n = (sec * 1000) + ((p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000);
+	}
 	return (n);
 }
 

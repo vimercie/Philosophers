@@ -59,6 +59,7 @@ int	data_init(t_data *data);
 int	philo_init(t_data *data, int i);
 
 // utils
+int	custom_usleep(int time_in_ms, t_philo *p);
 int	get_time(t_philo *p);
 int	ft_isdigit(int c);
 int	is_number(char *s);

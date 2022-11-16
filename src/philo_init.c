@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/08 19:12:52 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/14 17:08:44 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	philo_init(t_data *data, int i)
 		// get_time
 		data->p[i].time_from_start = &data->time_from_start;
 		gettimeofday(&data->p[i].time_now, NULL);
-		// sreidg
+		// 
 		data->p[i].n_philo = data->n_philo;
 		data->p[i].t_eat = data->t_eat;
 		data->p[i].t_sleep = data->t_sleep;

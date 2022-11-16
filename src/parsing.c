@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/04 16:08:38 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/15 17:50:10 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,14 @@ int	parsing(t_data *data, int argc, char *argv[])
 {
 	if (argc < 5 || argc > 6)
 	{
-		write(1, "invalid number of argument\n", 27);
+		if (argc == 1)
+		{
+			write(1, "Usage : ./philo [number_of_philosophers] [time_to_die]", 54);
+			write(1, " [time_to_eat] [time_to_sleep]", 30);
+			write(1, " [number_of_times_each_philosopher_must_eat]\n", 45);
+		}
+		else
+			write(1, "invalid number of argument\n", 27);
 		return (0);
 	}
 	if (argc == 5)
