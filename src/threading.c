@@ -6,56 +6,98 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/16 13:49:17 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/18 21:08:01 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
+int	is_dead(t_philo *p)
+{
+	p->time_in_ms = get_time(p);
+	if (p->time_in_ms - p->end_of_meal >= p->t_die)
+	{
+		printf("%ld %d DIED !\n", p->time_in_ms, *p->philo_id);
+		*p->data->stop = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	do_something(char something, t_philo *p)
+{
+	p->time_in_ms = get_time(p);
+	*p->thinking = 0;
+	if (*p->data->stop == 1)
+		return (0);
+	if (something == 'f')
+		printf("%ld %d has taken a fork\n", p->time_in_ms, *p->philo_id);
+	else if (something == 'e')
+	{
+		printf("%ld %d is eating\n", p->time_in_ms, *p->philo_id);
+		if (!custom_usleep(p->t_eat, p))
+			return (0);	
+	}
+	else if (something == 's')
+	{
+		printf("%ld %d is sleeping\n", p->time_in_ms, *p->philo_id);
+		if (!custom_usleep(p->t_sleep, p))
+			return (0);
+	}
+	else if (something == 't')
+	{
+		printf("%ld %d is thinking\n", p->time_in_ms, *p->philo_id);
+		*p->thinking = 1;
+	}
+	return (1);
+}
+
 void	*philo_routine(void *arg)
 {
 	t_philo		*p;
-	suseconds_t	time_in_ms;
-	suseconds_t	end_of_meal;
 	int			n_meal;
 	int			laps;
 
 	p = (t_philo *)arg;
-	time_in_ms = get_time(p);
-	end_of_meal = 0;
+	p->time_in_ms = get_time(p);
+	p->end_of_meal = 0;
 	n_meal = 0;
 	laps = 1;
 	while (1)
 	{
-		while (n_meal < laps && laps < 10)
+		while (*p->thinking == 1)
 		{
-			// take time
+			custom_usleep(10, p);
+			if (*p->data->stop == 1)
+				return (0);
+			if (is_dead(p))
+				return (0);
+		}
+		if (*p->data->stop == 1)
+			return (0);
+		if (n_meal <= laps + 1)
+		{
+			if (*p->data->stop == 1)
+				return (0);
 			pthread_mutex_lock(p->right_fork);
-			time_in_ms = get_time(p);
-			dprintf(1, "%ld %d has taken right fork\n", time_in_ms, *p->philo_id);
+			if (p->right_fork == p->left_fork)
+				break ;
+			do_something('f', p);
 			pthread_mutex_lock(p->left_fork);
-			time_in_ms = get_time(p);
-			dprintf(1, "%ld %d has taken left fork\n", time_in_ms,*p->philo_id);
-			time_in_ms = get_time(p);
-			dprintf(1, "%ld %d is eating\n", time_in_ms, *p->philo_id);
-			custom_usleep(p->t_eat, p);
+			do_something('f', p);
+			do_something('e', p);
 			n_meal++;
 			pthread_mutex_unlock(p->right_fork);
 			pthread_mutex_unlock(p->left_fork);
-			dprintf(1, "%d HAS EATEN %d TIMES\n", *p->philo_id, n_meal);
-			time_in_ms = get_time(p);
-			end_of_meal = time_in_ms;
-			dprintf(1, "%ld %d is sleeping\n", time_in_ms, *p->philo_id);
-			custom_usleep(p->t_sleep, p);
-			time_in_ms = get_time(p);
-			dprintf(1, "%ld %d is thinking\n", time_in_ms, *p->philo_id);
+			p->time_in_ms = get_time(p);
+			p->end_of_meal = p->time_in_ms;
+			do_something('s', p);
+			do_something('t', p);
 		}
-		time_in_ms = get_time(p);
-		if (time_in_ms - end_of_meal >= p->t_die)
-		{
-			dprintf(1, "%ld %d DIED !\n", time_in_ms, *p->philo_id);
+		if (p->right_fork == p->left_fork)
+			pthread_mutex_unlock(p->right_fork);
+		if (is_dead(p))
 			return (0);
-		}
 		laps++;
 	}
 	free(p->philo_id);
@@ -64,7 +106,7 @@ void	*philo_routine(void *arg)
 
 int	thread_init(t_data *data)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	if (!data_init(data))
