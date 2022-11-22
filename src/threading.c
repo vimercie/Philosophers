@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/18 21:08:01 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/11/22 18:34:06 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,38 @@ void	*philo_routine(void *arg)
 	laps = 1;
 	while (1)
 	{
-		while (*p->thinking == 1)
-		{
-			custom_usleep(10, p);
-			if (*p->data->stop == 1)
-				return (0);
-			if (is_dead(p))
-				return (0);
-		}
+		// while (*p->thinking == 1)
+		// {
+		// 	custom_usleep(10, p);
+		// 	if (*p->data->stop == 1)
+		// 		return (0);
+		// 	if (is_dead(p))
+		// 		return (0);
+		// }
 		if (*p->data->stop == 1)
 			return (0);
 		if (n_meal <= laps + 1)
 		{
 			if (*p->data->stop == 1)
 				return (0);
-			pthread_mutex_lock(p->right_fork);
-			if (p->right_fork == p->left_fork)
-				break ;
-			do_something('f', p);
-			pthread_mutex_lock(p->left_fork);
-			do_something('f', p);
+			if (*p->philo_id % 2 == 0)
+			{
+				pthread_mutex_lock(p->left_fork);
+				if (p->right_fork == p->left_fork)
+					break ;
+				do_something('f', p);
+				pthread_mutex_lock(p->right_fork);
+				do_something('f', p);
+			}
+			else
+			{
+				pthread_mutex_lock(p->right_fork);
+				if (p->right_fork == p->left_fork)
+					break ;
+				do_something('f', p);
+				pthread_mutex_lock(p->left_fork);
+				do_something('f', p);
+			}
 			do_something('e', p);
 			n_meal++;
 			pthread_mutex_unlock(p->right_fork);
