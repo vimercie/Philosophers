@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/18 19:34:38 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/02 03:55:10 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ int	is_number(char *s)
 
 int	is_negative(t_data *data)
 {
-	if (data->n_philo < 0
-		|| data->t_die < 0
-		|| data->t_eat < 0
-		|| data->t_sleep < 0
-		|| data->n_eat < 0)
+	if (data->args.n_philo < 0
+		|| data->args.t_die < 0
+		|| data->args.t_eat < 0
+		|| data->args.t_sleep < 0
+		|| data->args.n_eat < 0)
 	{
 		write(1, "argument value can't be negative\n", 33);
 		return (0);
@@ -81,11 +81,11 @@ int	is_negative(t_data *data)
 int	n_eat_init(int argc, char *argv[], t_data *data)
 {
 	if (argc == 5)
-		data->n_eat = 0;
+		data->args.n_eat = 0;
 	else
 	{
 		if (is_number(argv[5]))
-			data->n_eat = ft_atoi(argv[5]);
+			data->args.n_eat = ft_atoi(argv[5]);
 		else
 		{
 			write(1, "all arguments must be integers\n", 31);

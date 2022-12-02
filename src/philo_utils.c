@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/11/18 19:55:39 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/02 06:00:02 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int	get_time(t_philo *p)
 	suseconds_t	n;
 	time_t		sec;
 
-	gettimeofday(&p->time_now, NULL);
-	if (p->time_from_start->tv_sec == p->time_now.tv_sec)
-		n = (p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000;
+	gettimeofday(&p->time.time_now, NULL);
+	if (p->time.time_from_start->tv_sec == p->time.time_now.tv_sec)
+		n = (p->time.time_now.tv_usec - p->time.time_from_start->tv_usec) / 1000;
 	else
 	{
-		sec = p->time_now.tv_sec - p->time_from_start->tv_sec;
-		n = (sec * 1000) + ((p->time_now.tv_usec - p->time_from_start->tv_usec) / 1000);
+		sec = p->time.time_now.tv_sec - p->time.time_from_start->tv_sec;
+		n = (sec * 1000) + ((p->time.time_now.tv_usec - p->time.time_from_start->tv_usec) / 1000);
 	}
 	return (n);
 }

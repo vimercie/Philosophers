@@ -9,7 +9,7 @@ INCDIR=		inc
 SRC=		main.c						\
 			parsing.c					\
 			threading.c					\
-			philo_init.c				\
+			init.c						\
 			philo_utils.c				\
 			libft_func.c				\
 			checking.c
