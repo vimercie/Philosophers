@@ -59,7 +59,7 @@ typedef struct s_data
 	pthread_t		*threads;
 	pthread_mutex_t	*forks_id;
 	int				*stop;
-	pthread_mutex_t	*exit;
+	// pthread_mutex_t	*exit;
 	struct timeval	time_from_start;
 	int				i;
 }				t_data;
@@ -72,7 +72,7 @@ int	thread_init(t_data *p);
 
 // init
 int	data_init(t_data *data);
-int	philo_init(t_data *data, int i);
+int	philo_init(t_data *data);
 
 // utils
 int	custom_usleep(int time_in_ms, t_philo *p);

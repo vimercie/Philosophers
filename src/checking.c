@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/02 03:55:10 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/05 16:16:35 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	is_integer(char *argv[])
 		if (!is_number(argv[i]))
 		{
 			write(1, "all arguments must be integers\n", 31);
-			return (0);	
+			return (0);
 		}
 		i++;
 	}
