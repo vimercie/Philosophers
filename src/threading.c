@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 19:40:58 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/06 00:14:00 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	is_dead(t_philo *p)
 		*p->data->stop = 1;
 		usleep(1000);
 		p->time.time_in_ms = get_time(p);
-		printf("%d %d died\n", p->time.time_in_ms, *p->philo_id);
+		printf("%ld %d died\n", p->time.time_in_ms, *p->philo_id);
 		return (1);
 	}
 	return (0);
@@ -34,21 +34,21 @@ int	do_something(char something, t_philo *p)
 		return (0);
 	p->time.time_in_ms = get_time(p);
 	if (something == 'f')
-		printf("%d %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
+		printf("%ld %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 'e')
 	{
-		printf("%d %d is eating\n", p->time.time_in_ms, *p->philo_id);
+		printf("%ld %d is eating\n", p->time.time_in_ms, *p->philo_id);
 		custom_usleep(p->data->args.t_eat, p);
 		p->time.time_in_ms = get_time(p);
 		p->time.end_of_meal = p->time.time_in_ms;
 	}
 	else if (something == 's')
 	{
-		printf("%d %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
+		printf("%ld %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
 		custom_usleep(p->data->args.t_sleep, p);
 	}
 	else if (something == 't')
-		printf("%d %d is thinking\n", p->time.time_in_ms, *p->philo_id);
+		printf("%ld %d is thinking\n", p->time.time_in_ms, *p->philo_id);
 	return (1);
 }
 
@@ -83,8 +83,6 @@ void	*philo_routine(void *arg)
 
 int	thread_init(t_data *data)
 {
-	data->i = 0;
-	gettimeofday(&data->time_from_start, NULL);
 	while (data->i < data->args.n_philo)
 	{
 		if (pthread_create(&data->threads[data->i], NULL,

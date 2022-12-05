@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 19:35:16 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/06 00:06:53 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	data_init(t_data *data)
 		data->i++;
 	}
 	*data->stop = 0;
+	gettimeofday(&data->time_from_start, NULL);
 	data->i = 0;
 	if (!philo_init(data))
 		return (0);
