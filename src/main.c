@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 18:31:44 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 18:10:08 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 19:24:09 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,12 @@ int	main(int argc, char *argv[])
 		return (0);
 	if (!thread_init(&data))
 		free_data(&data);
+	data.i = 0;
+	while (data.i < data.args.n_philo)
+	{
+		free_philo(&data.p[data.i]);
+		data.i++;
+	}
+	free_data(&data);
 	return (0);
 }

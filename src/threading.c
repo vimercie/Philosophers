@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 18:22:54 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 19:40:58 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	do_something(char something, t_philo *p)
 	{
 		printf("%d %d is eating\n", p->time.time_in_ms, *p->philo_id);
 		custom_usleep(p->data->args.t_eat, p);
+		p->time.time_in_ms = get_time(p);
+		p->time.end_of_meal = p->time.time_in_ms;
 	}
 	else if (something == 's')
 	{
@@ -61,7 +63,7 @@ void	*philo_routine(void *arg)
 		custom_usleep(p->data->args.t_eat, p);
 	while (1)
 	{
-		if (*p->data->stop == 1)
+		if (is_dead(p) || *p->n_eat == 0 || *p->data->stop == 1)
 			break ;
 		pthread_mutex_lock(p->right_fork);
 		do_something('f', p);
@@ -70,14 +72,12 @@ void	*philo_routine(void *arg)
 		do_something('e', p);
 		pthread_mutex_unlock(p->right_fork);
 		pthread_mutex_unlock(p->left_fork);
-		p->time.time_in_ms = get_time(p);
-		p->time.end_of_meal = p->time.time_in_ms;
+		*p->n_eat -= 1;
+		if (*p->n_eat == 0)
+			break ;
 		do_something('s', p);
 		do_something('t', p);
-		if (is_dead(p))
-			break ;
 	}
-	free_philo(p);
 	return (0);
 }
 
@@ -97,8 +97,8 @@ int	thread_init(t_data *data)
 	{
 		if (pthread_join(data->threads[data->i], NULL) != 0)
 			return (0);
+		pthread_mutex_destroy(&data->forks_id[data->i]);
 		data->i++;
 	}
-	free_data(data);
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vimercie <vimercie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/05 18:31:34 by vimercie          #+#    #+#             */
-/*   Updated: 2022/10/05 18:31:34 by vimercie         ###   ########.fr       */
+/*   Created: 2022/12/05 18:26:43 by vimercie          #+#    #+#             */
+/*   Updated: 2022/12/05 18:26:43 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_philo
 	t_data			*data;
 	t_time			time;
 	int				*philo_id;
+	int				*n_eat;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
 }				t_philo;
@@ -59,9 +60,8 @@ typedef struct s_data
 	pthread_t		*threads;
 	pthread_mutex_t	*forks_id;
 	int				*stop;
-	// pthread_mutex_t	*exit;
-	struct timeval	time_from_start;
 	int				i;
+	struct timeval	time_from_start;
 }				t_data;
 
 // parsing

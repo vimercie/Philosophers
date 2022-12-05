@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 16:46:33 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 19:34:03 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,21 @@ int	get_time(t_philo *p)
 					- p->time.time_from_start->tv_usec) / 1000);
 	}
 	return (n);
+}
+
+int	n_eat_init(int argc, char *argv[], t_data *data)
+{
+	if (argc == 5)
+		data->args.n_eat = 2147483647;
+	else
+	{
+		if (is_number(argv[5]))
+			data->args.n_eat = ft_atoi(argv[5]);
+		else
+		{
+			write(1, "all arguments must be integers\n", 31);
+			return (0);
+		}
+	}
+	return (1);
 }

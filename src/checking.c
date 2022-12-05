@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 16:16:35 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 18:44:13 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,23 +74,6 @@ int	is_negative(t_data *data)
 	{
 		write(1, "argument value can't be negative\n", 33);
 		return (0);
-	}
-	return (1);
-}
-
-int	n_eat_init(int argc, char *argv[], t_data *data)
-{
-	if (argc == 5)
-		data->args.n_eat = 0;
-	else
-	{
-		if (is_number(argv[5]))
-			data->args.n_eat = ft_atoi(argv[5]);
-		else
-		{
-			write(1, "all arguments must be integers\n", 31);
-			return (0);
-		}
 	}
 	return (1);
 }

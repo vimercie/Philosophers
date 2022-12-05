@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 18:24:18 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/05 19:35:16 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	free_philo(t_philo *p)
 {
-	// free(p->data);
 	free(p->philo_id);
-	// p->data = NULL;
+	free(p->n_eat);
 	p->philo_id = NULL;
+	p->n_eat = NULL;
 	return (0);
 }
 
@@ -41,18 +41,11 @@ int	philo_init(t_data *data)
 	i = 0;
 	while (i < data->args.n_philo)
 	{
-		data->p[i].data = malloc(sizeof(t_data));
 		data->p[i].philo_id = malloc(sizeof(int));
-		if (data->p[i].philo_id == NULL || data->p[i].data == NULL)
-		{
-			free(data->p[i].data);
-			free(data->p[i].philo_id);
-			data->p[i].data = NULL;
-			data->p[i].philo_id = NULL;
-			return (0);
-		}
+		data->p[i].n_eat = malloc(sizeof(int));
 		data->p[i].data = data;
 		*data->p[i].philo_id = i + 1;
+		*data->p[i].n_eat = data->args.n_eat;
 		data->p[i].left_fork = &data->forks_id[i];
 		if (i + 1 < data->args.n_philo)
 			data->p[i].right_fork = &data->forks_id[i + 1];
@@ -75,7 +68,10 @@ int	data_init(t_data *data)
 		|| data->threads == NULL
 		|| data->forks_id == NULL
 		|| data->stop == NULL)
+	{
+		free_data(data);
 		return (0);
+	}
 	data->i = 0;
 	while (data->i < data->args.n_philo)
 	{
