@@ -6,25 +6,42 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 18:44:13 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/12 22:51:17 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	arg_check(int argc)
+int	is_dead(t_philo *p)
 {
-	if (argc < 5 || argc > 6)
+	p->time.time_in_ms = get_time(p);
+	if (p->time.time_in_ms - p->time.last_meal >= p->data->args.t_die)
+		return (1);
+	return (0);
+}
+
+int	is_signed_int(char *argv[])
+{
+	int	i;
+	int	size;
+
+	i = 1;
+	while (argv[i])
 	{
-		if (argc == 1)
+		size = ft_strlen(argv[i]);
+		if (argv[i][0] != '-')
 		{
-			write(1, "Usage : ./philo [number_of_philosophers]", 40);
-			write(1, " [time_to_die] [time_to_eat] [time_to_sleep]", 44);
-			write(1, " [number_of_times_each_philosopher_must_eat]\n", 45);
+			if (size > 10
+				|| (size == 10 && ft_strcmp(argv[i], "2147483647") > 0))
+				return (0);
 		}
 		else
-			write(1, "invalid number of argument\n", 27);
-		return (0);
+		{
+			if (size > 11
+				|| (size == 11 && ft_strcmp(argv[i], "-2147483648") > 0))
+				return (0);
+		}
+		i++;
 	}
 	return (1);
 }
@@ -37,10 +54,7 @@ int	is_integer(char *argv[])
 	while (argv[i])
 	{
 		if (!is_number(argv[i]))
-		{
-			write(1, "all arguments must be integers\n", 31);
 			return (0);
-		}
 		i++;
 	}
 	return (1);
@@ -53,7 +67,7 @@ int	is_number(char *s)
 	i = 0;
 	if (!s[0])
 		return (0);
-	if (s[0] == '-')
+	if (s[0] == '-' && s[1])
 		i++;
 	while (s[i])
 	{
@@ -71,9 +85,6 @@ int	is_negative(t_data *data)
 		|| data->args.t_eat < 0
 		|| data->args.t_sleep < 0
 		|| data->args.n_eat < 0)
-	{
-		write(1, "argument value can't be negative\n", 33);
-		return (0);
-	}
-	return (1);
+		return (1);
+	return (0);
 }

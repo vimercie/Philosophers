@@ -6,11 +6,47 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 18:31:44 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 19:24:09 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/12 04:29:36 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+int	free_philo(t_philo *p)
+{
+	free(p->philo_id);
+	free(p->n_eat);
+	p->philo_id = NULL;
+	p->n_eat = NULL;
+	return (0);
+}
+
+int	free_data(t_data *data)
+{
+	free(data->p);
+	free(data->threads);
+	free(data->forks_id);
+	free(data->death);
+	data->p = NULL;
+	data->threads = NULL;
+	data->forks_id = NULL;
+	data->death = NULL;
+	return (0);
+}
+
+int	free_all(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->args.n_philo)
+	{
+		free_philo(&data->p[i]);
+		i++;
+	}
+	free_data(data);
+	return (1);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -20,14 +56,8 @@ int	main(int argc, char *argv[])
 		return (0);
 	if (!data_init(&data))
 		return (0);
-	if (!thread_init(&data))
+	if (!threading(&data))
 		free_data(&data);
-	data.i = 0;
-	while (data.i < data.args.n_philo)
-	{
-		free_philo(&data.p[data.i]);
-		data.i++;
-	}
-	free_data(&data);
+	free_all(&data);
 	return (0);
 }

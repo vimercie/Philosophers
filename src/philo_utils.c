@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/05 19:34:03 by vimercie         ###   ########lyon.fr   */
+/*   Updated: 2022/12/12 22:44:05 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,45 +21,70 @@ int	custom_usleep(int time_in_ms, t_philo *p)
 	now = 0;
 	while ((now - start) < time_in_ms)
 	{
-		usleep(50);
 		now = get_time(p);
-		if (*p->data->stop == 1)
+		if (is_dead(p))
+		{
+			do_something('d', p);
 			return (0);
+		}
+		usleep(50);
 	}
 	return (1);
 }
 
 int	get_time(t_philo *p)
 {
-	suseconds_t	n;
+	suseconds_t	ms;
 	time_t		sec;
 
 	gettimeofday(&p->time.time_now, NULL);
 	if (p->time.time_from_start->tv_sec == p->time.time_now.tv_sec)
-		n = (p->time.time_now.tv_usec
+		ms = (p->time.time_now.tv_usec
 				- p->time.time_from_start->tv_usec) / 1000;
 	else
 	{
 		sec = p->time.time_now.tv_sec - p->time.time_from_start->tv_sec;
-		n = (sec * 1000) + ((p->time.time_now.tv_usec
+		ms = (sec * 1000) + ((p->time.time_now.tv_usec
 					- p->time.time_from_start->tv_usec) / 1000);
 	}
-	return (n);
+	return (ms);
 }
 
-int	n_eat_init(int argc, char *argv[], t_data *data)
+int	print_action(char something, t_philo *p)
 {
-	if (argc == 5)
-		data->args.n_eat = 2147483647;
-	else
+	p->time.time_in_ms = get_time(p);
+	if (something == 'f')
+		printf("%ld %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
+	else if (something == 'e')
+		printf("%ld %d is eating\n", p->time.time_in_ms, *p->philo_id);
+	else if (something == 's')
+		printf("%ld %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
+	else if (something == 't')
+		printf("%ld %d is thinking\n", p->time.time_in_ms, *p->philo_id);
+	else if (something == 'd')
 	{
-		if (is_number(argv[5]))
-			data->args.n_eat = ft_atoi(argv[5]);
-		else
-		{
-			write(1, "all arguments must be integers\n", 31);
-			return (0);
-		}
+		printf("%ld %d died\n", p->time.time_in_ms, *p->philo_id);
+		*p->data->death = 1;
 	}
+	return (1);
+}
+
+int	do_something(char something, t_philo *p)
+{
+	pthread_mutex_lock(p->data->message_queue);
+	if (*p->data->death == 1)
+	{
+		pthread_mutex_unlock(p->data->message_queue);
+		return (0);
+	}
+	if (is_dead(p) && something != 'd')
+	{
+		pthread_mutex_unlock(p->data->message_queue);
+		if (*p->data->death == 0)
+			do_something('d', p);
+		return (0);
+	}
+	print_action(something, p);
+	pthread_mutex_unlock(p->data->message_queue);
 	return (1);
 }

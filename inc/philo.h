@@ -31,7 +31,7 @@ typedef struct s_time
 	struct timeval	*time_from_start;
 	struct timeval	time_now;
 	suseconds_t		time_in_ms;
-	suseconds_t		end_of_meal;
+	suseconds_t		last_meal;
 }				t_time;
 
 typedef struct s_args
@@ -59,33 +59,42 @@ typedef struct s_data
 	t_args			args;
 	pthread_t		*threads;
 	pthread_mutex_t	*forks_id;
-	int				*stop;
-	int				i;
+	pthread_mutex_t	*message_queue;
+	int				*death;
+	int				*argc;
 	struct timeval	time_from_start;
 }				t_data;
 
 // parsing
 int	parsing(t_data *p, int argc, char *argv[]);
+int	arg_check(int argc);
 
 // threading
-int	thread_init(t_data *p);
+int	threading(t_data *p);
+int	do_something(char something, t_philo *p);
+int	exit_philo(t_data *data);
 
 // init
+int	args_init(t_data *data, int argc, char *argv[]);
 int	data_init(t_data *data);
 int	philo_init(t_data *data);
 
 // utils
 int	custom_usleep(int time_in_ms, t_philo *p);
 int	get_time(t_philo *p);
+int	print_action(char something, t_philo *p);
+int	do_something(char something, t_philo *p);
 
 // checking
-int	arg_check(int argc);
+int	is_dead(t_philo *p);
+int	is_signed_int(char *argv[]);
 int	is_integer(char *argv[]);
 int	is_number(char *s);
 int	is_negative(t_data *data);
-int	n_eat_init(int argc, char *argv[], t_data *data);
 
 // libft
+int	ft_strlen(const char *s);
+int	ft_strcmp(const char *s1, const char *s2);
 int	ft_isdigit(int c);
 int	ft_atoi(const char *str);
 

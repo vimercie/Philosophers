@@ -6,32 +6,43 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 01:53:43 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/12 21:14:04 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	free_philo(t_philo *p)
+int	args_init(t_data *data, int argc, char *argv[])
 {
-	free(p->philo_id);
-	free(p->n_eat);
-	p->philo_id = NULL;
-	p->n_eat = NULL;
-	return (0);
-}
+	int	error;
 
-int	free_data(t_data *data)
-{
-	free(data->p);
-	free(data->threads);
-	free(data->forks_id);
-	free(data->stop);
-	data->p = NULL;
-	data->threads = NULL;
-	data->forks_id = NULL;
-	data->stop = NULL;
-	return (0);
+	error = 0;
+	data->args.n_philo = ft_atoi(argv[1]);
+	data->args.t_die = ft_atoi(argv[2]);
+	if (data->args.t_die == 0)
+	{
+		write(1, "t_die value can't be 0\n", 23);
+		error = 1;
+	}
+	data->args.t_eat = ft_atoi(argv[3]);
+	if (data->args.t_eat == 0)
+	{
+		write(1, "t_eat value can't be 0\n", 23);
+		error = 1;
+	}
+	data->args.t_sleep = ft_atoi(argv[4]);
+	if (data->args.t_sleep == 0)
+	{
+		write(1, "t_sleep value can't be 0\n", 25);
+		error = 1;
+	}
+	if (argc == 6)
+		data->args.n_eat = ft_atoi(argv[5]);
+	else
+		data->args.n_eat = 0;
+	if (error == 1)
+		return (0);
+	return (1);
 }
 
 int	fork_init(t_data *data, int i)
@@ -77,10 +88,9 @@ int	philo_init(t_data *data)
 				return (0);
 			}
 		data->p[i].data = data;
+		data->p[i].time.time_from_start = &data->time_from_start;
 		*data->p[i].philo_id = i + 1;
 		*data->p[i].n_eat = data->args.n_eat;
-		data->p[i].time.time_from_start = &data->time_from_start;
-		gettimeofday(&data->p[i].time.time_now, NULL);
 		i++;
 	}
 	return (1);
@@ -91,17 +101,19 @@ int	data_init(t_data *data)
 	data->p = malloc(data->args.n_philo * sizeof(t_philo));
 	data->threads = malloc(data->args.n_philo * sizeof(pthread_t));
 	data->forks_id = malloc(data->args.n_philo * sizeof(pthread_mutex_t));
-	data->stop = malloc(sizeof(int));
+	data->message_queue = malloc(sizeof(pthread_mutex_t));
+	data->death = malloc(sizeof(int));
 	if (data->p == NULL
 		|| data->threads == NULL
 		|| data->forks_id == NULL
-		|| data->stop == NULL)
+		|| data->message_queue == NULL
+		|| data->death == NULL
+		|| pthread_mutex_init(data->message_queue, NULL) != 0)
 	{
 		free_data(data);
 		return (0);
 	}
-	data->i = 0;
-	*data->stop = 0;
+	*data->death = 0;
 	gettimeofday(&data->time_from_start, NULL);
 	if (!philo_init(data))
 	{
