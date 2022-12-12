@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 22:44:05 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/12 23:53:25 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int	print_action(char something, t_philo *p)
 	if (something == 'f')
 		printf("%ld %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 'e')
+	{
 		printf("%ld %d is eating\n", p->time.time_in_ms, *p->philo_id);
+		p->time.last_meal = p->time.time_in_ms;
+	}
 	else if (something == 's')
 		printf("%ld %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 't')
@@ -77,11 +80,10 @@ int	do_something(char something, t_philo *p)
 		pthread_mutex_unlock(p->data->message_queue);
 		return (0);
 	}
-	if (is_dead(p) && something != 'd')
+	if (is_dead(p))
 	{
+		print_action('d', p);
 		pthread_mutex_unlock(p->data->message_queue);
-		if (*p->data->death == 0)
-			do_something('d', p);
 		return (0);
 	}
 	print_action(something, p);

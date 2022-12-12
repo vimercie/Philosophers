@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 22:43:25 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/12 23:48:40 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	*philo_routine(void *arg)
 		pthread_mutex_lock(p->right_fork);
 		do_something('f', p);
 		do_something('e', p);
-		p->time.last_meal = get_time(p);
 		*p->n_eat -= 1;
 		if (*p->n_eat == 0 && *p->data->argc == 6)
 			break ;
