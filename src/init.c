@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 21:14:04 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:35:08 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,27 @@ int	args_init(t_data *data, int argc, char *argv[])
 
 int	fork_init(t_data *data, int i)
 {
-		data->p[i].left_fork = &data->forks_id[i];
-		if (pthread_mutex_init(&data->forks_id[i], NULL) != 0)
-			return (0);
-		if (data->args.n_philo > 1)
+	data->p[i].left_fork = &data->forks_id[i];
+	if (pthread_mutex_init(data->p[i].left_fork, NULL) != 0)
+		return (0);
+	if (data->args.n_philo > 1)
+	{
+		if (i < data->args.n_philo - 1)
 		{
-			if (i < data->args.n_philo - 1)
-			{
-				data->p[i].right_fork = &data->forks_id[i + 1];
-				if (pthread_mutex_init(&data->forks_id[i + 1], NULL) != 0)
-					return (0);
-			}
-			else
-			{
-				data->p[i].right_fork = &data->forks_id[0];
-				if (pthread_mutex_init(&data->forks_id[0], NULL) != 0)
-					return (0);
-			}
+			data->p[i].right_fork = &data->forks_id[i + 1];
+			if (pthread_mutex_init(data->p[i].right_fork, NULL) != 0)
+				return (0);
 		}
 		else
-			data->p[i].right_fork = NULL;
-		return (1);
+		{
+			data->p[i].right_fork = &data->forks_id[0];
+			if (pthread_mutex_init(data->p[i].right_fork, NULL) != 0)
+				return (0);
+		}
+	}
+	else
+		data->p[i].right_fork = NULL;
+	return (1);
 }
 
 int	philo_init(t_data *data)
@@ -83,10 +83,10 @@ int	philo_init(t_data *data)
 		data->p[i].n_eat = malloc(sizeof(int));
 		if (data->p[i].philo_id == NULL
 			|| data->p[i].n_eat == NULL)
-			{
-				free_philo(&data->p[i]);
-				return (0);
-			}
+		{
+			free_philo(&data->p[i]);
+			return (0);
+		}
 		data->p[i].data = data;
 		data->p[i].time.time_from_start = &data->time_from_start;
 		*data->p[i].philo_id = i + 1;

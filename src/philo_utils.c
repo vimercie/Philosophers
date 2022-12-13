@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 23:53:25 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:15:05 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	custom_usleep(int time_in_ms, t_philo *p)
 	while ((now - start) < time_in_ms)
 	{
 		now = get_time(p);
-		if (is_dead(p))
+		if (is_dead(p) || *p->data->death == 1)
 		{
 			do_something('d', p);
 			return (0);
@@ -54,19 +54,16 @@ int	print_action(char something, t_philo *p)
 {
 	p->time.time_in_ms = get_time(p);
 	if (something == 'f')
-		printf("%ld %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
+		printf("%d %d has taken a fork\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 'e')
-	{
-		printf("%ld %d is eating\n", p->time.time_in_ms, *p->philo_id);
-		p->time.last_meal = p->time.time_in_ms;
-	}
+		printf("%d %d is eating\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 's')
-		printf("%ld %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
+		printf("%d %d is sleeping\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 't')
-		printf("%ld %d is thinking\n", p->time.time_in_ms, *p->philo_id);
+		printf("%d %d is thinking\n", p->time.time_in_ms, *p->philo_id);
 	else if (something == 'd')
 	{
-		printf("%ld %d died\n", p->time.time_in_ms, *p->philo_id);
+		printf("%d %d died\n", p->time.time_in_ms, *p->philo_id);
 		*p->data->death = 1;
 	}
 	return (1);
@@ -87,6 +84,8 @@ int	do_something(char something, t_philo *p)
 		return (0);
 	}
 	print_action(something, p);
+	if (something == 'e')
+		p->time.last_meal = get_time(p);
 	pthread_mutex_unlock(p->data->message_queue);
 	return (1);
 }

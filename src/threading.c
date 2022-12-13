@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 23:48:40 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/13 12:43:33 by vimercie         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,21 @@ void	*one_philo(void *arg)
 	return (0);
 }
 
+int	take_forks(t_philo *p)
+{
+	if (*p->philo_id % 2 == 0)
+		pthread_mutex_lock(p->left_fork);
+	else
+		pthread_mutex_lock(p->right_fork);
+	do_something('f', p);
+	if (*p->philo_id % 2 == 0)
+		pthread_mutex_lock(p->right_fork);
+	else
+		pthread_mutex_lock(p->left_fork);
+	do_something('f', p);
+	return (1);
+}
+
 void	*philo_routine(void *arg)
 {
 	t_philo			*p;
@@ -53,25 +68,17 @@ void	*philo_routine(void *arg)
 		custom_usleep(p->data->args.t_eat, p);
 	while (*p->data->death == 0)
 	{
-		pthread_mutex_lock(p->left_fork);
-		do_something('f', p);
-		pthread_mutex_lock(p->right_fork);
-		do_something('f', p);
+		take_forks(p);
 		do_something('e', p);
-		*p->n_eat -= 1;
-		if (*p->n_eat == 0 && *p->data->argc == 6)
-			break ;
 		custom_usleep(p->data->args.t_eat, p);
+		*p->n_eat -= 1;
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->right_fork);
+		if (*p->n_eat == 0 && *p->data->argc == 6)
+			break ;
 		do_something('s', p);
 		custom_usleep(p->data->args.t_sleep, p);
 		do_something('t', p);
-	}
-	if (*p->n_eat == 0 && *p->data->argc == 6)
-	{
-		pthread_mutex_unlock(p->left_fork);
-		pthread_mutex_unlock(p->right_fork);
 	}
 	return (0);
 }
