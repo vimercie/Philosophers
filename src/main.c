@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 18:31:44 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 04:29:36 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 16:04:31 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ int	free_data(t_data *data)
 	free(data->p);
 	free(data->threads);
 	free(data->forks_id);
+	free(data->time);
 	free(data->death);
 	data->p = NULL;
 	data->threads = NULL;
 	data->forks_id = NULL;
+	data->time = NULL;
 	data->death = NULL;
 	return (0);
 }

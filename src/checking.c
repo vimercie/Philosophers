@@ -6,17 +6,32 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 23:55:27 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 16:52:05 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	is_dead(t_philo *p)
+int	is_dead(t_data *data)
 {
-	p->time.time_in_ms = get_time(p);
-	if (p->time.time_in_ms - p->time.last_meal >= p->data->args.t_die)
-		return (1);
+	int	i;
+
+	while (1)
+	{
+		i = 0;
+		while (i < data->args.n_philo)
+		{
+			data->time[i].time_in_ms = get_time(&data->p[i], i);
+			if (data->time[i].time_in_ms - data->time[i].last_meal >= data->args.t_die)
+			{
+				do_something('d', &data->p[i]);
+				*data->death = 1;
+				return (1);
+			}
+			i++;
+		}
+	}
+	
 	return (0);
 }
 
