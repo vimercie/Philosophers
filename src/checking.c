@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/14 16:52:05 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:10:29 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@ int	is_dead(t_data *data)
 		while (i < data->args.n_philo)
 		{
 			data->time[i].time_in_ms = get_time(&data->p[i], i);
-			if (data->time[i].time_in_ms - data->time[i].last_meal >= data->args.t_die)
+			if ((data->time[i].time_in_ms - data->time[i].last_meal >= data->args.t_die))
 			{
-				do_something('d', &data->p[i]);
-				*data->death = 1;
+				if (data->argc == 6 && *data->p[i].n_eat > 0)
+				{
+					do_something('d', &data->p[i]);
+					*data->death = 1;
+				}
 				return (1);
 			}
 			i++;

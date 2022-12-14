@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 22:50:35 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:14:02 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,45 @@ int	arg_check(int argc)
 	return (1);
 }
 
+int	args_init(t_data *data, int argc, char *argv[])
+{
+	int	error;
+
+	error = 0;
+	data->args.n_philo = ft_atoi(argv[1]);
+	data->args.t_die = ft_atoi(argv[2]);
+	if (data->args.t_die == 0)
+	{
+		write(1, "t_die value can't be 0\n", 23);
+		error = 1;
+	}
+	data->args.t_eat = ft_atoi(argv[3]);
+	if (data->args.t_eat == 0)
+	{
+		write(1, "t_eat value can't be 0\n", 23);
+		error = 1;
+	}
+	data->args.t_sleep = ft_atoi(argv[4]);
+	if (data->args.t_sleep == 0)
+	{
+		write(1, "t_sleep value can't be 0\n", 25);
+		error = 1;
+	}
+	if (argc == 6)
+		data->args.n_eat = ft_atoi(argv[5]);
+	else
+		data->args.n_eat = 0;
+	if (error == 1)
+		return (0);
+	return (1);
+}
+
 int	parsing(t_data *data, int argc, char *argv[])
 {
 	int	error;
 
 	error = 0;
-	data->argc = &argc;
+	data->argc = argc;
 	if (!arg_check(argc))
 		return (0);
 	else if (!is_integer(argv) || !is_signed_int(argv))

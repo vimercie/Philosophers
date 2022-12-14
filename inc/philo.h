@@ -60,12 +60,13 @@ typedef struct s_data
 	pthread_mutex_t	*message_queue;
 	t_time			*time;
 	int				*death;
-	int				*argc;
+	int				argc;
 	struct timeval	time_from_start;
 }				t_data;
 
 // parsing
 int	parsing(t_data *p, int argc, char *argv[]);
+int	args_init(t_data *data, int argc, char *argv[]);
 int	arg_check(int argc);
 
 // threading
@@ -74,7 +75,6 @@ int	do_something(char something, t_philo *p);
 int	exit_philo(t_data *data);
 
 // init
-int	args_init(t_data *data, int argc, char *argv[]);
 int	data_init(t_data *data);
 int	philo_init(t_data *data);
 
