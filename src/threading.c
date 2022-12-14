@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/14 18:15:38 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:29:37 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	*one_philo(void *arg)
 	p->data->time[*p->philo_id - 1].last_meal = 0;
 	p->data->time[*p->philo_id - 1].time_in_ms = get_time(p, 0);
 	do_something('f', p);
-	while (*p->data->death == 0)
+	while (1)
 	{
 		if (*p->data->death == 1)
-			return (0);
+			break ;
 	}
 	return (0);
 }
