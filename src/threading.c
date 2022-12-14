@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/14 18:32:33 by vimercie         ###   ########.fr       */
+/*   Updated: 2022/12/14 18:42:42 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ void	*philo_routine(void *arg)
 	p = (t_philo *)arg;
 	if (*p->philo_id % 2 == 0)
 		custom_usleep(p->data->args.t_eat, p);
-	while (*p->data->death == 0 && *p->n_eat > 0)
+	while (*p->data->death == 0)
 	{
+		if (*p->n_eat == 0 && p->data->argc == 6)
+			break ;
 		pthread_mutex_lock(p->left_fork);
 		do_something('f', p);
 		pthread_mutex_lock(p->right_fork);

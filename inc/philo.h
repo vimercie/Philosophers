@@ -55,13 +55,13 @@ typedef struct s_data
 {
 	t_philo			*p;
 	t_args			args;
+	t_time			*time;
 	pthread_t		*threads;
 	pthread_mutex_t	*forks_id;
 	pthread_mutex_t	*message_queue;
-	t_time			*time;
+	struct timeval	time_from_start;
 	int				*death;
 	int				argc;
-	struct timeval	time_from_start;
 }				t_data;
 
 // parsing
