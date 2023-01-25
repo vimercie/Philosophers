@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 20:02:33 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:11:33 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,7 @@ void	*p_routine(void *arg)
 		// 	pthread_mutex_unlock(p->right_fork);
 		// 	return (0);
 		// }
-		if (!custom_usleep(p->data->args.t_sleep, p))
-			return (0);
+		custom_usleep(p->data->args.t_sleep, p);
 		do_something('t', p);
 	}
 	return (0);

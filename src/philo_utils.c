@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 20:02:22 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:11:19 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,7 @@ int	eat_pasta(t_philo *p)
 	pthread_mutex_lock(&p->data->meal_lock);
 	p->last_meal = get_time(p->data);
 	pthread_mutex_unlock(&p->data->meal_lock);
-	if (!custom_usleep(p->data->args.t_eat, p))
-	{
-		pthread_mutex_unlock(p->left_fork);
-		pthread_mutex_unlock(p->right_fork);
-		return (0);
-	}
+	custom_usleep(p->data->args.t_eat, p);
 	do_something('s', p);
 	pthread_mutex_unlock(p->left_fork);
 	pthread_mutex_unlock(p->right_fork);
