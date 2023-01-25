@@ -20,21 +20,15 @@
 # include <string.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
 typedef struct s_data	t_data;
 typedef struct s_philo	t_philo;
 typedef struct s_args	t_args;
-typedef struct s_time	t_time;
-
-typedef struct s_time
-{
-	struct timeval	time_now;
-	suseconds_t		time_in_ms;
-	suseconds_t		last_meal;
-}				t_time;
 
 typedef struct s_args
 {
+	int	argc;
 	int	n_philo;
 	int	t_die;
 	int	t_eat;
@@ -45,23 +39,26 @@ typedef struct s_args
 typedef struct s_philo
 {
 	t_data			*data;
-	int				*philo_id;
-	int				*n_eat;
+	pthread_t		thread;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
+	int				id;
+	int				n_eat;
+	suseconds_t		last_meal;
 }				t_philo;
 
 typedef struct s_data
 {
 	t_philo			*p;
 	t_args			args;
-	t_time			*time;
-	pthread_t		*threads;
 	pthread_mutex_t	*forks_id;
-	pthread_mutex_t	*message_queue;
 	struct timeval	time_from_start;
-	int				*death;
-	int				argc;
+	struct timeval	time_now;
+	bool			death;
+	pthread_mutex_t	message_queue;
+	pthread_mutex_t	time_lock;
+	pthread_mutex_t	death_lock;
+	pthread_mutex_t	meal_lock;
 }				t_data;
 
 // parsing
@@ -79,9 +76,10 @@ int	data_init(t_data *data);
 int	philo_init(t_data *data);
 
 // utils
-suseconds_t	get_time(t_philo *p, int i);
-int	custom_usleep(int time_in_ms, t_philo *p);
-int	print_action(char something, t_philo *p);
+int	check_death(t_data *data);
+suseconds_t	get_time(t_data *data);
+int	custom_usleep(int t_ms, t_philo *p);
+int	eat_pasta(t_philo *p);
 int	do_something(char something, t_philo *p);
 
 // checking
@@ -99,6 +97,5 @@ int	ft_atoi(const char *str);
 
 // free
 int	free_data(t_data *data);
-int	free_philo(t_philo *p);
 
 #endif

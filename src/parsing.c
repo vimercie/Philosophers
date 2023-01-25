@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/14 18:14:02 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/24 19:16:13 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	parsing(t_data *data, int argc, char *argv[])
 	int	error;
 
 	error = 0;
-	data->argc = argc;
+	data->args.argc = argc;
 	if (!arg_check(argc))
 		return (0);
 	else if (!is_integer(argv) || !is_signed_int(argv))

@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/14 18:50:54 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/25 03:55:54 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,13 @@
 
 int	is_dead(t_data *data)
 {
-	int	i;
-
-	while (1)
+	pthread_mutex_lock(&data->death_lock);
+	if (data->death == 1)
 	{
-		i = 0;
-		while (i < data->args.n_philo)
-		{
-			data->time[i].time_in_ms = get_time(&data->p[i], i);
-			if (data->time[i].time_in_ms - data->time[i].last_meal >= data->args.t_die)
-			{
-				if (data->argc == 5 || (data->argc == 6 && *data->p[i].n_eat > 0))
-				{
-					do_something('d', &data->p[i]);
-					*data->death = 1;
-				}
-				return (1);
-			}
-			i++;
-		}
+		pthread_mutex_unlock(&data->death_lock);
+		return (1);
 	}
+	pthread_mutex_unlock(&data->death_lock);
 	return (0);
 }
 
