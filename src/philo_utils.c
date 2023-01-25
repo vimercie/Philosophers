@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 19:49:53 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:02:22 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ int	eat_pasta(t_philo *p)
 {
 	pthread_mutex_lock(p->left_fork);
 	do_something('f', p);
-	if (p->left_fork == p->right_fork)
-		return (0);
 	pthread_mutex_lock(p->right_fork);
 	do_something('f', p);
 	do_something('e', p);

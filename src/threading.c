@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 19:51:22 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/01/25 20:02:33 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,7 @@ void	*p_routine(void *arg)
 	{
 		if (!eat_pasta(p))
 		{
-			if (p->left_fork == p->right_fork)
-				pthread_mutex_unlock(p->right_fork);
-			else
-				do_something('d', p);
+			do_something('d', p);
 			return (0);
 		}
 		// if (p->n_eat >= 0)
