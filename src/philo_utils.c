@@ -6,13 +6,35 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 20:11:19 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/05 02:10:31 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	check_death(t_data *data) 
+suseconds_t	get_time(t_data *data)
+{
+	suseconds_t	ms;
+	time_t		sec;
+
+	pthread_mutex_lock(&data->time_lock);
+	gettimeofday(&data->time_now, NULL);
+	if (data->time_from_start.tv_sec == data->time_now.tv_sec)
+	{
+		ms = (data->time_now.tv_usec
+				- data->time_from_start.tv_usec) / 1000;
+	}
+	else
+	{
+		sec = data->time_now.tv_sec - data->time_from_start.tv_sec;
+		ms = (sec * 1000) + ((data->time_now.tv_usec
+					- data->time_from_start.tv_usec) / 1000);
+	}
+	pthread_mutex_unlock(&data->time_lock);
+	return (ms);
+}
+
+int	check_death(t_data *data)
 {
 	suseconds_t	since_last_meal;
 	int			i;
@@ -56,34 +78,27 @@ int	custom_usleep(int t_ms, t_philo *p)
 	return (1);
 }
 
-suseconds_t	get_time(t_data *data)
+int	take_forks(t_philo *p)
 {
-	suseconds_t	ms;
-	time_t		sec;
-
-	pthread_mutex_lock(&data->time_lock);
-	gettimeofday(&data->time_now, NULL);
-	if (data->time_from_start.tv_sec == data->time_now.tv_sec)
+	if (p->id != p->data->args.n_philo)
 	{
-		ms = (data->time_now.tv_usec
-				- data->time_from_start.tv_usec) / 1000;
+		pthread_mutex_lock(p->left_fork);
+		do_something('f', p);
+		pthread_mutex_lock(p->right_fork);
 	}
 	else
 	{
-		sec = data->time_now.tv_sec - data->time_from_start.tv_sec;
-		ms = (sec * 1000) + ((data->time_now.tv_usec
-					- data->time_from_start.tv_usec) / 1000);
+		pthread_mutex_lock(p->right_fork);
+		do_something('f', p);
+		pthread_mutex_lock(p->left_fork);
 	}
-	pthread_mutex_unlock(&data->time_lock);
-	return (ms);
+	do_something('f', p);
+	return (0);
 }
 
 int	eat_pasta(t_philo *p)
 {
-	pthread_mutex_lock(p->left_fork);
-	do_something('f', p);
-	pthread_mutex_lock(p->right_fork);
-	do_something('f', p);
+	take_forks(p);
 	do_something('e', p);
 	pthread_mutex_lock(&p->data->meal_lock);
 	p->last_meal = get_time(p->data);

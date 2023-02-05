@@ -6,34 +6,37 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 04:12:59 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/05 02:11:38 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	fork_init(t_data *data, int i)
+int	fork_init(t_data *data)
 {
-	data->p[i].left_fork = &data->forks_id[i];
-	if (pthread_mutex_init(data->p[i].left_fork, NULL) != 0)
-		return (0);
-	if (data->args.n_philo > 1)
+	int	i;
+
+	i = 0;
+	while (i < data->args.n_philo)
 	{
-		if (i < data->args.n_philo - 1)
+		pthread_mutex_init(&data->forks_id[i], NULL);
+		i++;
+	}
+	i = 0;
+	while (i < data->args.n_philo)
+	{
+		data->p[i].left_fork = &data->forks_id[i];
+		if (data->args.n_philo > 1)
 		{
-			data->p[i].right_fork = &data->forks_id[i + 1];
-			if (pthread_mutex_init(data->p[i].right_fork, NULL) != 0)
-				return (0);
+			if (i < data->args.n_philo - 1)
+				data->p[i].right_fork = &data->forks_id[i + 1];
+			else
+				data->p[i].right_fork = &data->forks_id[0];
 		}
 		else
-		{
-			data->p[i].right_fork = &data->forks_id[0];
-			if (pthread_mutex_init(data->p[i].right_fork, NULL) != 0)
-				return (0);
-		}
+			data->p[i].right_fork = NULL;
+		i++;
 	}
-	else
-		data->p[i].right_fork = NULL;
 	return (1);
 }
 
@@ -42,10 +45,10 @@ int	philo_init(t_data *data)
 	int	i;
 
 	i = 0;
+	if (!fork_init(data))
+		return (0);
 	while (i < data->args.n_philo)
 	{
-		if (!fork_init(data, i))
-			return (0);
 		data->p[i].data = data;
 		data->p[i].id = i + 1;
 		data->p[i].last_meal = 0;

@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 20:11:33 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/05 03:07:57 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	exit_philo(t_data *data)
 	}
 	pthread_mutex_destroy(&data->message_queue);
 	pthread_mutex_destroy(&data->time_lock);
+	pthread_mutex_destroy(&data->death_lock);
+	pthread_mutex_destroy(&data->meal_lock);
 	return (1);
 }
 
@@ -58,7 +60,7 @@ void	*p_routine(void *arg)
 	p = (t_philo *)arg;
 	if (p->n_eat == 0)
 		return (0);
-	if (p->id % 2 == 0)
+	if (p->id % 2 != 0)
 	{
 		do_something('t', p);
 		custom_usleep(p->data->args.t_eat, p);

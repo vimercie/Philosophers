@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/24 19:16:13 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/05 02:42:40 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,65 +29,58 @@ int	arg_check(int argc)
 	return (1);
 }
 
+int	print_error(int errnum, char *arg)
+{
+	if (errnum == 1)
+		printf("%s value can't be 0\n", arg);
+	else if (errnum == 2)
+		printf("all arguments must be integers\n");
+	else if (errnum == 3)
+		printf("argument value can't be negative\n");
+	else if (errnum == 4)
+		printf("there must be at least one philosopher\n");
+	return (0);
+}
+
 int	args_init(t_data *data, int argc, char *argv[])
 {
-	int	error;
+	int	return_val;
 
-	error = 0;
+	return_val = 1;
 	data->args.n_philo = ft_atoi(argv[1]);
 	data->args.t_die = ft_atoi(argv[2]);
 	if (data->args.t_die == 0)
-	{
-		write(1, "t_die value can't be 0\n", 23);
-		error = 1;
-	}
+		return_val = print_error(1, "t_die");
 	data->args.t_eat = ft_atoi(argv[3]);
 	if (data->args.t_eat == 0)
-	{
-		write(1, "t_eat value can't be 0\n", 23);
-		error = 1;
-	}
+		return_val = print_error(1, "t_eat");
 	data->args.t_sleep = ft_atoi(argv[4]);
 	if (data->args.t_sleep == 0)
-	{
-		write(1, "t_sleep value can't be 0\n", 25);
-		error = 1;
-	}
+		return_val = print_error(1, "t_sleep");
 	if (argc == 6)
 		data->args.n_eat = ft_atoi(argv[5]);
 	else
 		data->args.n_eat = 0;
-	if (error == 1)
-		return (0);
-	return (1);
+	return (return_val);
 }
 
 int	parsing(t_data *data, int argc, char *argv[])
 {
-	int	error;
+	int	return_val;
 
-	error = 0;
+	return_val = 1;
 	data->args.argc = argc;
 	if (!arg_check(argc))
 		return (0);
 	else if (!is_integer(argv) || !is_signed_int(argv))
-	{
-		write(1, "all arguments must be integers\n", 31);
-		return (0);
-	}
+		return (print_error(2, NULL));
 	if (!args_init(data, argc, argv))
-		error = 1;
+		return_val = 0;
 	if (is_negative(data))
-	{
-		write(1, "argument value can't be negative\n", 33);
-		error = 1;
-	}
+		return_val = print_error(3, NULL);
 	if (data->args.n_philo < 1)
-	{
-		write(1, "there must be at least one philosopher\n", 39);
-		error = 1;
-	}
-	if (error == 1)
+		return_val = print_error(4, NULL);
+	if (return_val == 1)
 		return (0);
-	return (1);
+	return (return_val);
 }
