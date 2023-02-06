@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/05 02:42:40 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/05 22:37:21 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,5 @@ int	parsing(t_data *data, int argc, char *argv[])
 		return_val = print_error(3, NULL);
 	if (data->args.n_philo < 1)
 		return_val = print_error(4, NULL);
-	if (return_val == 1)
-		return (0);
 	return (return_val);
 }

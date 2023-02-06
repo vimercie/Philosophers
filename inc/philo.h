@@ -51,14 +51,15 @@ typedef struct s_data
 {
 	t_philo			*p;
 	t_args			args;
-	pthread_mutex_t	*forks_id;
+	bool			stop;
 	struct timeval	time_from_start;
 	struct timeval	time_now;
-	bool			death;
+	pthread_mutex_t	*forks_id;
 	pthread_mutex_t	message_queue;
 	pthread_mutex_t	time_lock;
-	pthread_mutex_t	death_lock;
-	pthread_mutex_t	meal_lock;
+	pthread_mutex_t	last_meal_lock;
+	pthread_mutex_t	n_eat_lock;
+	pthread_mutex_t	stop_lock;
 }				t_data;
 
 // parsing
@@ -77,13 +78,15 @@ int			philo_init(t_data *data);
 
 // utils
 suseconds_t	get_time(t_data *data);
-int			check_death(t_data *data);
 int			custom_usleep(int t_ms, t_philo *p);
-int			eat_pasta(t_philo *p);
+int			check_stop(t_data *data);
+int			check_death(t_data *data, int id);
+int			is_sated(t_philo *p);
+int			take_forks(t_philo *p);
 int			do_something(char something, t_philo *p);
 
 // checking
-int			is_dead(t_data *data);
+int			is_stop(t_data *data);
 int			is_signed_int(char *argv[]);
 int			is_integer(char *argv[]);
 int			is_number(char *s);

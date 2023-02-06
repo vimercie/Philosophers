@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 18:40:54 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/05 02:11:38 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/06 06:31:17 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ int	philo_init(t_data *data)
 	int	i;
 
 	i = 0;
-	if (!fork_init(data))
-		return (0);
 	while (i < data->args.n_philo)
 	{
 		data->p[i].data = data;
@@ -65,22 +63,19 @@ int	data_init(t_data *data)
 {
 	data->p = malloc(data->args.n_philo * sizeof(t_philo));
 	data->forks_id = malloc(data->args.n_philo * sizeof(pthread_mutex_t));
-	if (data->p == NULL
-		|| data->forks_id == NULL)
+	if (data->p == NULL || data->forks_id == NULL)
 	{
 		free_data(data);
 		return (0);
 	}
 	pthread_mutex_init(&data->message_queue, NULL);
 	pthread_mutex_init(&data->time_lock, NULL);
-	pthread_mutex_init(&data->death_lock, NULL);
-	pthread_mutex_init(&data->meal_lock, NULL);
-	data->death = 0;
-	if (!philo_init(data))
-	{
-		free_data(data);
-		return (0);
-	}
+	pthread_mutex_init(&data->last_meal_lock, NULL);
+	pthread_mutex_init(&data->n_eat_lock, NULL);
+	pthread_mutex_init(&data->stop_lock, NULL);
+	data->stop = 0;
+	fork_init(data);
+	philo_init(data);
 	gettimeofday(&data->time_from_start, NULL);
 	return (1);
 }

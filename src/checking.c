@@ -6,22 +6,36 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2023/01/25 03:55:54 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/06 06:25:25 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	is_dead(t_data *data)
+int	is_stop(t_data *data)
 {
-	pthread_mutex_lock(&data->death_lock);
-	if (data->death == 1)
+	int	ret;
+
+	pthread_mutex_lock(&data->stop_lock);
+	ret = data->stop;
+	pthread_mutex_unlock(&data->stop_lock);
+	return (ret);
+}
+
+int	is_sated(t_philo *p)
+{
+	int	ret;
+
+	ret = 0;
+	pthread_mutex_lock(&p->data->n_eat_lock);
+	if (p->n_eat > 0)
 	{
-		pthread_mutex_unlock(&data->death_lock);
-		return (1);
+		p->n_eat--;
+		if (p->n_eat == 0)
+			ret = 1;
 	}
-	pthread_mutex_unlock(&data->death_lock);
-	return (0);
+	pthread_mutex_unlock(&p->data->n_eat_lock);
+	return (ret);
 }
 
 int	is_signed_int(char *argv[])

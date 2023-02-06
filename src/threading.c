@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/05 03:07:57 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/06 06:32:08 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ int	exit_philo(t_data *data)
 	}
 	pthread_mutex_destroy(&data->message_queue);
 	pthread_mutex_destroy(&data->time_lock);
-	pthread_mutex_destroy(&data->death_lock);
-	pthread_mutex_destroy(&data->meal_lock);
+	pthread_mutex_destroy(&data->n_eat_lock);
+	pthread_mutex_destroy(&data->last_meal_lock);
+	pthread_mutex_destroy(&data->stop_lock);
 	return (1);
 }
 
@@ -46,7 +47,7 @@ void	*one_philo(void *arg)
 	do_something('f', p);
 	while (1)
 	{
-		if (is_dead(p->data))
+		if (is_stop(p->data))
 			break ;
 	}
 	pthread_mutex_unlock(p->left_fork);
@@ -57,7 +58,7 @@ void	*p_routine(void *arg)
 {
 	t_philo			*p;
 
-	p = (t_philo *)arg;
+	p = arg;
 	if (p->n_eat == 0)
 		return (0);
 	if (p->id % 2 != 0)
@@ -65,21 +66,18 @@ void	*p_routine(void *arg)
 		do_something('t', p);
 		custom_usleep(p->data->args.t_eat, p);
 	}
-	while (!is_dead(p->data))
+	while (!is_stop(p->data))
 	{
-		if (!eat_pasta(p))
-		{
-			do_something('d', p);
-			return (0);
-		}
-		// if (p->n_eat >= 0)
-		// 	p->n_eat -= 1;
-		// if (p->n_eat == 0)
-		// {
-		// 	pthread_mutex_unlock(p->left_fork);
-		// 	pthread_mutex_unlock(p->right_fork);
-		// 	return (0);
-		// }
+		take_forks(p);
+		do_something('e', p);
+		is_sated(p);
+		pthread_mutex_lock(&p->data->last_meal_lock);
+		p->last_meal = get_time(p->data);
+		pthread_mutex_unlock(&p->data->last_meal_lock);
+		custom_usleep(p->data->args.t_eat, p);
+		do_something('s', p);
+		pthread_mutex_unlock(p->left_fork);
+		pthread_mutex_unlock(p->right_fork);
 		custom_usleep(p->data->args.t_sleep, p);
 		do_something('t', p);
 	}
@@ -94,7 +92,7 @@ int	threading(t_data *data)
 	if (data->args.n_philo == 1)
 	{
 		pthread_create(&data->p[0].thread, NULL, &one_philo, &data->p[0]);
-		check_death(data);
+		check_stop(data);
 	}
 	else
 	{
@@ -103,7 +101,7 @@ int	threading(t_data *data)
 			pthread_create(&data->p[i].thread, NULL, &p_routine, &data->p[i]);
 			i++;
 		}
-		check_death(data);
+		check_stop(data);
 	}
 	exit_philo(data);
 	return (1);
