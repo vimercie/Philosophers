@@ -22,22 +22,6 @@ int	is_stop(t_data *data)
 	return (ret);
 }
 
-int	is_sated(t_philo *p)
-{
-	int	ret;
-
-	ret = 0;
-	pthread_mutex_lock(&p->data->n_eat_lock);
-	if (p->n_eat > 0)
-	{
-		p->n_eat--;
-		if (p->n_eat == 0)
-			ret = 1;
-	}
-	pthread_mutex_unlock(&p->data->n_eat_lock);
-	return (ret);
-}
-
 int	is_signed_int(char *argv[])
 {
 	int	i;

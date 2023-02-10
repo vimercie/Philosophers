@@ -71,9 +71,6 @@ void	*p_routine(void *arg)
 		take_forks(p);
 		do_something('e', p);
 		is_sated(p);
-		pthread_mutex_lock(&p->data->last_meal_lock);
-		p->last_meal = get_time(p->data);
-		pthread_mutex_unlock(&p->data->last_meal_lock);
 		custom_usleep(p->data->args.t_eat, p);
 		do_something('s', p);
 		pthread_mutex_unlock(p->left_fork);

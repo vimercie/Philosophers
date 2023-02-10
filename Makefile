@@ -11,6 +11,7 @@ SRC=		main.c						\
 			threading.c					\
 			init.c						\
 			philo_utils.c				\
+			philo_utils_bis.c			\
 			libft_func.c				\
 			checking.c
 

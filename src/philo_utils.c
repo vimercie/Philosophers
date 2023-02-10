@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:34:57 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/06 06:25:20 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/10 16:10:45 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,51 +51,6 @@ int	custom_usleep(int t_ms, t_philo *p)
 	return (1);
 }
 
-int	check_stop(t_data *data)
-{
-	int	n_hungry_philo;
-	int	i;
-
-	while (1)
-	{
-		i = 0;
-		n_hungry_philo = data->args.n_philo;
-		while (i < data->args.n_philo)
-		{
-			pthread_mutex_lock(&data->n_eat_lock);
-			if (data->p[i].n_eat == 0)
-				n_hungry_philo--;
-			pthread_mutex_unlock(&data->n_eat_lock);
-			i++;
-		}
-		i = 0;
-		if (n_hungry_philo == 0)
-			break ;
-		if (check_death(data, i))
-		{
-			do_something('d', &data->p[i]);
-			break ;
-		}
-		i++;
-	}
-	pthread_mutex_lock(&data->stop_lock);
-	data->stop = 1;
-	pthread_mutex_unlock(&data->stop_lock);
-	return (1);
-}
-
-int	check_death(t_data *data, int id)
-{
-	suseconds_t	since_last_meal;
-
-	pthread_mutex_lock(&data->last_meal_lock);
-	since_last_meal = get_time(data) - data->p[id].last_meal;
-	pthread_mutex_unlock(&data->last_meal_lock);
-	if (since_last_meal >= data->args.t_die)
-		return (1);
-	return (0);
-}
-
 int	take_forks(t_philo *p)
 {
 	if (p->id != p->data->args.n_philo)
@@ -123,7 +78,12 @@ int	do_something(char something, t_philo *p)
 	if (something == 'f')
 		printf("has taken a fork\n");
 	else if (something == 'e')
+	{
 		printf("is eating\n");
+		pthread_mutex_lock(&p->data->last_meal_lock);
+		p->last_meal = get_time(p->data);
+		pthread_mutex_unlock(&p->data->last_meal_lock);
+	}
 	else if (something == 's')
 		printf("is sleeping\n");
 	else if (something == 't')
