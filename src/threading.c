@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/06 06:32:08 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:09:03 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	*p_routine(void *arg)
 		do_something('e', p);
 		is_sated(p);
 		custom_usleep(p->data->args.t_eat, p);
-		do_something('s', p);
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->right_fork);
+		do_something('s', p);
 		custom_usleep(p->data->args.t_sleep, p);
 		do_something('t', p);
 	}
