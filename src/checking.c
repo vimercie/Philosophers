@@ -6,21 +6,11 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/15 10:01:43 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 10:34:54 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-int	is_stop(t_data *data)
-{
-	int	ret;
-
-	pthread_mutex_lock(&data->stop_lock);
-	ret = data->stop;
-	pthread_mutex_unlock(&data->stop_lock);
-	return (ret);
-}
 
 int	is_signed_int(char *s)
 {

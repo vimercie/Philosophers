@@ -6,11 +6,23 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/15 10:04:15 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:04:03 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+int	print_error(int errnum, char *arg)
+{
+	if (errnum == 1)
+	{
+		write(2, arg, ft_strlen(arg));
+		write(2, " value can't be 0 or less\n", 26);
+	}
+	else if (errnum == 2)
+		write(2, "all arguments must be integers\n", 31);
+	return (0);
+}
 
 int	arg_check(int argc)
 {
@@ -29,18 +41,6 @@ int	arg_check(int argc)
 	return (1);
 }
 
-int	print_error(int errnum, char *arg)
-{
-	if (errnum == 1)
-	{
-		write(2, arg, ft_strlen(arg));
-		write(2, " value can't be 0 or less\n", 26);
-	}
-	else if (errnum == 2)
-		write(2, "all arguments must be integers\n", 31);
-	return (0);
-}
-
 int	args_init(t_data *data, int argc, char *argv[])
 {
 	int	return_val;
@@ -53,7 +53,7 @@ int	args_init(t_data *data, int argc, char *argv[])
 	if (argc == 6)
 		data->args.n_eat = ft_atoi(argv[5]);
 	else
-		data->args.n_eat = 0;
+		data->args.n_eat = -1;
 	return (return_val);
 }
 

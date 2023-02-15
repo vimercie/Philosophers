@@ -40,11 +40,12 @@ typedef struct s_philo
 {
 	t_data			*data;
 	pthread_t		thread;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
+	suseconds_t		last_meal;
 	int				id;
 	int				n_eat;
-	suseconds_t		last_meal;
+	pthread_mutex_t	n_eat_lock;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
 }				t_philo;
 
 typedef struct s_data
@@ -58,7 +59,6 @@ typedef struct s_data
 	pthread_mutex_t	message_queue;
 	pthread_mutex_t	time_lock;
 	pthread_mutex_t	last_meal_lock;
-	pthread_mutex_t	n_eat_lock;
 	pthread_mutex_t	stop_lock;
 }				t_data;
 

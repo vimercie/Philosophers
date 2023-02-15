@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 16:09:29 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/10 16:10:53 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:07:48 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,24 @@ int	is_sated(t_philo *p)
 	int	ret;
 
 	ret = 0;
-	pthread_mutex_lock(&p->data->n_eat_lock);
+	pthread_mutex_lock(&p->n_eat_lock);
 	if (p->n_eat > 0)
 	{
 		p->n_eat--;
 		if (p->n_eat == 0)
 			ret = 1;
 	}
-	pthread_mutex_unlock(&p->data->n_eat_lock);
+	pthread_mutex_unlock(&p->n_eat_lock);
+	return (ret);
+}
+
+int	is_stop(t_data *data)
+{
+	int	ret;
+
+	pthread_mutex_lock(&data->stop_lock);
+	ret = data->stop;
+	pthread_mutex_unlock(&data->stop_lock);
 	return (ret);
 }
 
@@ -37,10 +47,10 @@ int	check_satiety(t_data *data)
 	n_hungry_philo = data->args.n_philo;
 	while (i < data->args.n_philo)
 	{
-		pthread_mutex_lock(&data->n_eat_lock);
+		pthread_mutex_lock(&data->p[i].n_eat_lock);
 		if (data->p[i].n_eat == 0)
 			n_hungry_philo--;
-		pthread_mutex_unlock(&data->n_eat_lock);
+		pthread_mutex_unlock(&data->p[i].n_eat_lock);
 		i++;
 	}
 	if (n_hungry_philo == 0)

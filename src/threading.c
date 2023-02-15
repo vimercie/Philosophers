@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 12:32:31 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/12 19:09:03 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:11:00 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ int	exit_philo(t_data *data)
 	while (i < data->args.n_philo)
 	{
 		pthread_mutex_destroy(&data->forks_id[i]);
+		pthread_mutex_destroy(&data->p[i].n_eat_lock);
 		i++;
 	}
 	pthread_mutex_destroy(&data->message_queue);
 	pthread_mutex_destroy(&data->time_lock);
-	pthread_mutex_destroy(&data->n_eat_lock);
 	pthread_mutex_destroy(&data->last_meal_lock);
 	pthread_mutex_destroy(&data->stop_lock);
 	return (1);
@@ -87,10 +87,7 @@ int	threading(t_data *data)
 
 	i = 0;
 	if (data->args.n_philo == 1)
-	{
 		pthread_create(&data->p[0].thread, NULL, &one_philo, &data->p[0]);
-		check_stop(data);
-	}
 	else
 	{
 		while (i < data->args.n_philo)
@@ -98,8 +95,8 @@ int	threading(t_data *data)
 			pthread_create(&data->p[i].thread, NULL, &p_routine, &data->p[i]);
 			i++;
 		}
-		check_stop(data);
 	}
+	check_stop(data);
 	exit_philo(data);
 	return (1);
 }
