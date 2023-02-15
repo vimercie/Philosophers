@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:17:47 by vimercie          #+#    #+#             */
-/*   Updated: 2022/12/12 22:53:47 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 10:01:43 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ int	ft_atoi(const char *str)
 {
 	int	i;
 	int	res;
-	int	is_negative;
+	int	is_allowed_val;
 
 	i = 0;
 	res = 0;
-	is_negative = 1;
+	is_allowed_val = 1;
 	if (str[0] == '-')
 	{
-		is_negative *= -1;
+		is_allowed_val *= -1;
 		i++;
 	}
 	while (ft_isdigit(str[i]))
@@ -64,5 +64,5 @@ int	ft_atoi(const char *str)
 		res = (res * 10) + (str[i] - '0');
 		i++;
 	}
-	return (res * is_negative);
+	return (res * is_allowed_val);
 }

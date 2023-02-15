@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/06 06:25:25 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 10:01:43 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,20 @@ int	is_stop(t_data *data)
 	return (ret);
 }
 
-int	is_signed_int(char *argv[])
+int	is_signed_int(char *s)
 {
-	int	i;
 	int	size;
 
-	i = 1;
-	while (argv[i])
+	size = ft_strlen(s);
+	if (s[0] != '-')
 	{
-		size = ft_strlen(argv[i]);
-		if (argv[i][0] != '-')
-		{
-			if (size > 10
-				|| (size == 10 && ft_strcmp(argv[i], "2147483647") > 0))
-				return (0);
-		}
-		else
-		{
-			if (size > 11
-				|| (size == 11 && ft_strcmp(argv[i], "-2147483648") > 0))
-				return (0);
-		}
-		i++;
+		if (size > 10 || (size == 10 && ft_strcmp(s, "2147483647") > 0))
+			return (0);
+	}
+	else
+	{
+		if (size > 11 || (size == 11 && ft_strcmp(s, "-2147483648") > 0))
+			return (0);
 	}
 	return (1);
 }
@@ -55,7 +47,7 @@ int	is_integer(char *argv[])
 	i = 1;
 	while (argv[i])
 	{
-		if (!is_number(argv[i]))
+		if (!is_number(argv[i]) || !is_signed_int(argv[i]))
 			return (0);
 		i++;
 	}
@@ -80,13 +72,20 @@ int	is_number(char *s)
 	return (1);
 }
 
-int	is_negative(t_data *data)
+int	is_allowed_val(t_data *data)
 {
-	if (data->args.n_philo < 0
-		|| data->args.t_die < 0
-		|| data->args.t_eat < 0
-		|| data->args.t_sleep < 0
-		|| data->args.n_eat < 0)
-		return (1);
-	return (0);
+	int	return_val;
+	
+	return_val = 1;
+	if (data->args.n_philo <= 0)
+		return_val = print_error(1, "n_philo");
+	if (data->args.t_die <= 0)
+		return_val = print_error(1, "t_die");
+	if (data->args.t_eat <= 0)
+		return_val = print_error(1, "t_eat");
+	if (data->args.t_sleep <= 0)
+		return_val = print_error(1, "t_sleep");
+	if (data->args.n_eat <= 0 && data->args.argc == 6)
+		return_val = print_error(1, "n_eat");
+	return (return_val);
 }

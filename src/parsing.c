@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/15 09:28:27 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 10:04:15 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,10 @@ int	print_error(int errnum, char *arg)
 	if (errnum == 1)
 	{
 		write(2, arg, ft_strlen(arg));
-		write(2, " value can't be 0\n", 18);
+		write(2, " value can't be 0 or less\n", 26);
 	}
 	else if (errnum == 2)
 		write(2, "all arguments must be integers\n", 31);
-	else if (errnum == 3)
-		write(2, "argument value can't be negative\n", 33);
-	else if (errnum == 4)
-		write(2, "there must be at least one philosopher\n", 39);
 	return (0);
 }
 
@@ -52,14 +48,8 @@ int	args_init(t_data *data, int argc, char *argv[])
 	return_val = 1;
 	data->args.n_philo = ft_atoi(argv[1]);
 	data->args.t_die = ft_atoi(argv[2]);
-	if (data->args.t_die == 0)
-		return_val = print_error(1, "t_die");
 	data->args.t_eat = ft_atoi(argv[3]);
-	if (data->args.t_eat == 0)
-		return_val = print_error(1, "t_eat");
 	data->args.t_sleep = ft_atoi(argv[4]);
-	if (data->args.t_sleep == 0)
-		return_val = print_error(1, "t_sleep");
 	if (argc == 6)
 		data->args.n_eat = ft_atoi(argv[5]);
 	else
@@ -69,19 +59,13 @@ int	args_init(t_data *data, int argc, char *argv[])
 
 int	parsing(t_data *data, int argc, char *argv[])
 {
-	int	return_val;
-
-	return_val = 1;
 	data->args.argc = argc;
 	if (!arg_check(argc))
 		return (0);
-	else if (!is_integer(argv) || !is_signed_int(argv))
+	if (!is_integer(argv))
 		return (print_error(2, NULL));
-	if (!args_init(data, argc, argv))
-		return_val = 0;
-	if (is_negative(data))
-		return_val = print_error(3, NULL);
-	if (data->args.n_philo < 1)
-		return_val = print_error(4, NULL);
-	return (return_val);
+	args_init(data, argc, argv);
+	if (!is_allowed_val(data))
+		return (0);
+	return (1);
 }

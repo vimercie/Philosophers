@@ -66,6 +66,7 @@ typedef struct s_data
 int			parsing(t_data *p, int argc, char *argv[]);
 int			args_init(t_data *data, int argc, char *argv[]);
 int			arg_check(int argc);
+int			print_error(int errnum, char *arg);
 
 // threading
 int			threading(t_data *p);
@@ -82,15 +83,14 @@ int			custom_usleep(int t_ms, t_philo *p);
 int			check_stop(t_data *data);
 int			check_death(t_data *data, int id);
 int			is_sated(t_philo *p);
+int			is_stop(t_data *data);
 int			take_forks(t_philo *p);
-int			do_something(char something, t_philo *p);
 
 // checking
-int			is_stop(t_data *data);
-int			is_signed_int(char *argv[]);
-int			is_integer(char *argv[]);
+int			is_signed_int(char *s);
 int			is_number(char *s);
-int			is_negative(t_data *data);
+int			is_integer(char *argv[]);
+int			is_allowed_val(t_data *data);
 
 // libft
 int			ft_strlen(const char *s);
