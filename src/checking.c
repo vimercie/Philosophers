@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 19:19:27 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/15 10:34:54 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:57:47 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	is_number(char *s)
 int	is_allowed_val(t_data *data)
 {
 	int	return_val;
-	
+
 	return_val = 1;
 	if (data->args.n_philo <= 0)
 		return_val = print_error(1, "n_philo");
