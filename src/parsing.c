@@ -6,7 +6,7 @@
 /*   By: vimercie <vimercie@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:24:17 by vimercie          #+#    #+#             */
-/*   Updated: 2023/02/05 22:37:21 by vimercie         ###   ########.fr       */
+/*   Updated: 2023/02/15 09:28:27 by vimercie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	arg_check(int argc)
 	{
 		if (argc == 1)
 		{
-			write(1, "Usage : ./philo [number_of_philosophers]", 40);
-			write(1, " [time_to_die] [time_to_eat] [time_to_sleep]", 44);
-			write(1, " [number_of_times_each_philosopher_must_eat]\n", 45);
+			write(2, "Usage : ./philo [number_of_philosophers]", 40);
+			write(2, " [time_to_die] [time_to_eat] [time_to_sleep]", 44);
+			write(2, " [number_of_times_each_philosopher_must_eat]\n", 45);
 		}
 		else
-			write(1, "invalid number of argument\n", 27);
+			write(2, "invalid number of argument\n", 27);
 		return (0);
 	}
 	return (1);
@@ -32,13 +32,16 @@ int	arg_check(int argc)
 int	print_error(int errnum, char *arg)
 {
 	if (errnum == 1)
-		printf("%s value can't be 0\n", arg);
+	{
+		write(2, arg, ft_strlen(arg));
+		write(2, " value can't be 0\n", 18);
+	}
 	else if (errnum == 2)
-		printf("all arguments must be integers\n");
+		write(2, "all arguments must be integers\n", 31);
 	else if (errnum == 3)
-		printf("argument value can't be negative\n");
+		write(2, "argument value can't be negative\n", 33);
 	else if (errnum == 4)
-		printf("there must be at least one philosopher\n");
+		write(2, "there must be at least one philosopher\n", 39);
 	return (0);
 }
 
